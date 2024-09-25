@@ -1,0 +1,53 @@
+<div (window:resize)="onResize($event)" [ngClass]="{'left-99': (sidenav.status | async)===false }"
+    class="nav-container position-fixed h-100 mh-100 sidenav d-flex flex-column flex-shrink-0">
+    <div class="sidebar-heading p-0 text-center">
+        <div class="d-flex justify-content-center">
+            <img width="80px" src="/assets/logo.png">
+        </div>
+    </div>
+    <div *ngIf="navService.isLoading" class="d-flex justify-content-center w-100 pe-md-3">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <ul [class.d-none]="navService.isLoading" class="nav nav-pills flex-column mb-auto mt-1">
+        <li class="nav-item">
+            <a routerLink="./dashboard" routerLinkActive="active" class="nav-link px-3" aria-current="page">
+                <i class="material-icons">dashboard</i>
+                Dashboard
+            </a>
+        </li>
+        <ng-template ngFor let-nav let-i="index" [ngForOf]="navData">
+            <li *ngIf="!nav.parent_id" class="nav-item">
+                <a *ngIf="nav.link" routerLink="/{{nav.link}}"
+                    class="nav-link px-3 align-middle px-0 d-md-flex align-items-center text-center">
+                    <i class="material-icons">{{nav.icon}}</i>
+                    {{nav.name}}
+                </a>
+                <a *ngIf="!nav.link" (click)="toggleNav(i)" [class.a-expanded]="isCollapsed[i]"
+                    class="nav-link px-3 align-middle px-0 d-md-flex align-items-center text-center cursor-pointer child-link">
+                    <i class="material-icons">{{nav.icon}}</i>
+                    {{nav.name}}
+                </a>
+                <ul [class.expanded]="isCollapsed[i]" [attr.data-index]="i" class="sub-child ps-3"
+                    *ngIf="nav.childs.length">
+                    <ng-template ngFor let-child [ngForOf]="nav.childs">
+                        <li class="nav-item sub-nav border-top rounded" [class.active]="isActive(child.link)">
+                            <a *ngIf="child.link" routerLink="/{{child.link}}"
+                                class="nav-link align-middle px-0 d-md-flex align-items-center text-center">
+                                <i class="material-icons">{{child.icon}}</i>
+                                {{child.name}}
+                            </a>
+                        </li>
+                    </ng-template>
+                </ul>
+            </li>
+        </ng-template>
+        <!-- <li class="nav-item">
+            <a href="/manual_book.pdf" target="_blank" class="nav-link px-3">
+                <i class="material-icons">help</i>
+                Help
+            </a>
+        </li> -->
+    </ul>
+</div>

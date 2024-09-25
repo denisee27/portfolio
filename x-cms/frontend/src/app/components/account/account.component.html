@@ -1,0 +1,137 @@
+<div class="row mb-4">
+    <div class="col-sm-12 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6 col-sm-12 d-md-flex align-items-center">
+                        <h4 class="card-title me-2 mb-md-0 mb-3">
+                            <div [ngSwitch]="view">
+                                <span *ngSwitchCase="0">
+                                    Account Information
+                                </span>
+                                <span *ngSwitchCase="1">
+                                    Update Profile
+                                </span>
+                                <span *ngSwitchCase="2">
+                                    Change Password
+                                </span>
+                            </div>
+                        </h4>
+                    </div>
+                    <div class="col-md-6 col-sm-12 d-flex justify-content-end">
+                        <button (click)="view=1" [disabled]="view==1" class="btn btn-sm btn-outline-secondary me-2">Update Profile</button>
+                        <button (click)="view=2" [disabled]="view==2" class="btn btn-sm btn-outline-danger me-2">Change Password</button>
+                    </div>
+                </div>
+                <div [ngSwitch]="view" class="row">
+                    <div *ngSwitchCase="0" class="col-md-5">
+                        <table class="w-100" cellpadding="5">
+                            <tr>
+                                <td>Name</td>
+                                <td>:</td>
+                                <td>
+                                    {{userData.name}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>:</td>
+                                <td>
+                                    {{userData.email}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Phone Number</td>
+                                <td>:</td>
+                                <td>
+                                    {{userData.phone || '-'}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{userData.vendor_id?'Vendor':'Role'}}</td>
+                                <td>:</td>
+                                <td>
+                                    {{userData.role}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div *ngSwitchCase="1" class="col-md-8">
+                        <form #theForm="ngForm" (ngSubmit)="updateProfile(profileGroup)" novalidate class="col-md-8">
+                            <div [formGroup]="profileGroup">
+                                <div class="form-floating mb-4">
+                                    <input type="text" formControlName="name" [class.is-invalid]="profileGroup.get('name')?.invalid && (theForm.submitted || profileGroup.get('name')?.touched)" placeholder="..." class="form-control" required>
+                                    <label>Name</label>
+                                    <div class="text-danger position-absolute text-end w-100" *ngIf="profileGroup.get('name')?.invalid && (theForm.submitted || profileGroup.get('name')?.touched)">
+                                        <small *ngIf="profileGroup.get('name')?.errors?.required">Please type name</small>
+                                        <small *ngIf="profileGroup.get('name')?.errors?.serverError">{{ profileGroup.get("name")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-4">
+                                    <input type="text" [value]="userData.email" disabled placeholder="..." class="form-control">
+                                    <label>Email</label>
+                                </div>
+                                <div class="form-floating mb-4">
+                                    <input type="tel" formControlName="phone" [class.is-invalid]="profileGroup.get('phone')?.invalid && (theForm.submitted || profileGroup.get('phone')?.touched)" placeholder="..." class="form-control" required>
+                                    <label>Phone No.</label>
+                                    <div class="text-danger position-absolute text-end w-100" *ngIf="profileGroup.get('phone')?.invalid && (theForm.submitted || profileGroup.get('phone')?.touched)">
+                                        <small *ngIf="profileGroup.get('phone')?.errors?.required">Please type phone number</small>
+                                        <small *ngIf="profileGroup.get('phone')?.errors?.serverError">{{ profileGroup.get("phone")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center border-top pt-1">
+                                <div>&nbsp;</div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary" (click)="view=0" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">close</i> &nbsp; Cancel</button>
+                                    &nbsp;
+                                    <button type="submit" class="btn btn-primary" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">save</i> &nbsp; Update Profile</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div *ngSwitchCase="2" class="col-md-8">
+                        <form #theForm="ngForm" (ngSubmit)="changePassword(passwordGroup)" novalidate class="col-md-8">
+                            <div [formGroup]="passwordGroup">
+                                <div class="form-floating mb-4">
+                                    <input type="password" formControlName="password" [class.is-invalid]="passwordGroup.get('name')?.invalid && (theForm.submitted || passwordGroup.get('password')?.touched)" placeholder="..." class="form-control" required>
+                                    <label>Current Password</label>
+                                    <div class="text-danger position-absolute text-end w-100" *ngIf="passwordGroup.get('password')?.invalid && (theForm.submitted || passwordGroup.get('password')?.touched)">
+                                        <small *ngIf="passwordGroup.get('password')?.errors?.required">Please type current password</small>
+                                        <small *ngIf="passwordGroup.get('password')?.errors?.serverError">{{ passwordGroup.get("password")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-4">
+                                    <input type="password" formControlName="new_password" minlength="6" [class.is-invalid]="passwordGroup.get('name')?.invalid && (theForm.submitted || passwordGroup.get('new_password')?.touched)" placeholder="..." class="form-control" required>
+                                    <label>New Password</label>
+                                    <div class="text-danger position-absolute text-end w-100" *ngIf="passwordGroup.get('new_password')?.invalid && (theForm.submitted || passwordGroup.get('new_password')?.touched)">
+                                        <small *ngIf="passwordGroup.get('new_password')?.errors?.required">Please type new password</small>
+                                        <small *ngIf="passwordGroup.get('new_password')?.errors?.minlength">Minimum length is 6 characters</small>
+                                        <small *ngIf="passwordGroup.get('new_password')?.errors?.serverError">{{ passwordGroup.get("new_password")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-4">
+                                    <input type="password" formControlName="new_password_confirmation" pattern="({{passwordGroup.get('new_password')?.value}})$" [class.is-invalid]="passwordGroup.get('new_password_confirmation')?.invalid && (theForm.submitted || passwordGroup.get('new_password_confirmation')?.touched)" placeholder="..." class="form-control" required>
+                                    <label>Confirm New Passowrd</label>
+                                    <div class="text-danger position-absolute text-end w-100" *ngIf="passwordGroup.get('new_password_confirmation')?.invalid && (theForm.submitted || passwordGroup.get('new_password_confirmation')?.touched)">
+                                        <small *ngIf="passwordGroup.get('new_password_confirmation')?.errors?.required">Please confirm new password</small>
+                                        <small *ngIf="passwordGroup.get('new_password_confirmation')?.errors?.pattern">Must be same with new password</small>
+                                        <small *ngIf="passwordGroup.get('new_password_confirmation')?.errors?.serverError">{{ passwordGroup.get("new_password_confirmation")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center border-top pt-1">
+                                <div>&nbsp;</div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary" (click)="view=0" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">close</i> &nbsp; Cancel</button>
+                                    &nbsp;
+                                    <button type="submit" class="btn btn-primary" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">save</i> &nbsp; Change Password</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

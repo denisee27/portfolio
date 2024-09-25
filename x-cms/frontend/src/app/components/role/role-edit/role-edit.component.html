@@ -1,0 +1,92 @@
+<div class="row mb-4">
+    <div class="col-sm-12 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <h4 class="card-title col-12 mb-4">Edit Role</h4>
+                    <div class="text-center" *ngIf="!formGroup.get('id')?.value">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <form *ngIf="formGroup.get('id')?.value" #theForm="ngForm" (ngSubmit)="submitForm(formGroup)" novalidate class="col-md-8">
+                        <div [formGroup]="formGroup">
+                            <div class="form-floating mb-4">
+                                <input type="text" formControlName="name" [class.is-invalid]="formGroup.get('name')?.invalid && (theForm.submitted || formGroup.get('name')?.touched)" placeholder="..." class="form-control" required />
+                                <label>Name</label>
+                                <div class="text-danger position-absolute text-end w-100" *ngIf="formGroup.get('name')?.invalid && (theForm.submitted || formGroup.get('name')?.touched)">
+                                    <small *ngIf="formGroup.get('name')?.errors?.required">Please type name</small>
+                                    <small *ngIf="formGroup.get('name')?.errors?.serverError">{{ formGroup.get("name")?.errors?.serverError }}</small>
+                                </div>
+                            </div>
+                            <div class="form-check form-switch mb-4">
+                                <input class="form-check-input" type="checkbox" id="allow_mobile_login" formControlName="allow_mobile_login">
+                                <label class="form-check-label" for="allow_mobile_login"> Access Profile CMS Mobile : <strong>{{ formGroup.get("allow_mobile_login")?.value ? "Yes" : "No" }}</strong></label>
+                            </div>
+                            <div class="form-check form-switch mb-4">
+                                <input class="form-check-input" type="checkbox" formControlName="status" id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Status : <strong>{{ formGroup.get("status")?.value ? "Active" : "Inactive" }}</strong></label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="p-2 pt-0" *ngFor="let item of getRootNav();let i=index;">
+                                        <div class="d-flex flex-nowrap">
+                                            <div class="form-check w-50" *ngIf="item.childs.length">
+                                                <input class="form-check-input" type="checkbox" value="" id="root_nav_{{i}}" [checked]="isRootMenuChecked(item.childs)" (click)="toggleRootMenu(item.childs)" [disabled]="loading.status">
+                                                <label class="form-check-label fw-bold" for="root_nav_{{i}}">
+                                                    {{item.name}}
+                                                </label>
+                                            </div>
+                                            <div class="form-check w-50" *ngIf="!item.childs.length">
+                                                <input class="form-check-input" type="checkbox" value="" id="root_nav_{{i}}" [checked]="isMenuChecked(item)" (click)="toggleMenu(item)" [disabled]="loading.status">
+                                                <label class="form-check-label fw-bold" for="root_nav_{{i}}">
+                                                    {{item.name}}
+                                                </label>
+                                            </div>
+                                            <div class="d-flex flex-nowrap ps-4" *ngIf="!item.childs.length">
+                                                <div class="form-check me-3" *ngFor="let p of item.action;let pr=index;">
+                                                    <input class="form-check-input" type="checkbox" value="" id="pr_nav_{{pr}}_{{i}}" [disabled]="!isMenuChecked(item) || loading.status" [checked]="isPermissionChecked(p, item.link)" (click)="togglePermission(p, item.link)">
+                                                    <label class="form-check-label" for="pr_nav_{{pr}}_{{i}}">
+                                                        {{p}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ps-4" *ngIf="item.childs.length>0">
+                                            <div class="p-2" *ngFor="let sItem of item.childs;let s=index;">
+                                                <div class="d-flex flex-nowrap">
+                                                    <div class="form-check w-50">
+                                                        <input class="form-check-input" type="checkbox" value="" id="sub_nav_{{s}}_{{i}}" [checked]="isMenuChecked(sItem)" [disabled]="!isRootMenuChecked(item.childs) || loading.status" (click)="toggleMenu(sItem)">
+                                                        <label class="form-check-label fw-bold" for="sub_nav_{{s}}_{{i}}">
+                                                            {{sItem.name}}
+                                                        </label>
+                                                    </div>
+                                                    <div class="d-flex flex-nowrap w-100 justify-content-end">
+                                                        <div class="form-check me-3" *ngFor="let p of sItem.action;let sp=index;">
+                                                            <input class="form-check-input" type="checkbox" value="" id="sp_nav_{{sp}}_{{s}}_{{i}}" [disabled]="!isMenuChecked(sItem) || loading.status" [checked]="isPermissionChecked(p, sItem.link)" (click)="togglePermission(p, sItem.link)">
+                                                            <label class="form-check-label" for="sp_nav_{{sp}}_{{s}}_{{i}}">
+                                                                {{p}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-1">
+                            <div>&nbsp;</div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary" (click)="back()" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">close</i> &nbsp; Cancel</button>
+                                &nbsp;
+                                <button type="submit" class="btn btn-primary" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">save</i> &nbsp; Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

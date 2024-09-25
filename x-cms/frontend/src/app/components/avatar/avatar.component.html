@@ -1,0 +1,6 @@
+<div *ngIf="!userData.profile_pic" title="{{userData.name}}" class="avatar rounded-circle d-flex justify-content-center align-items-center fw-bold shadow-sm" [ngStyle]="genStyle()">
+    {{userData.initials}}
+</div>
+<div *ngIf="userData.profile_pic" title="{{userData.name}}" class="avatar rounded-circle d-flex justify-content-center align-items-center shadow-sm" [ngStyle]="genStyle()">
+    <img [src]="userData.profile_pic" class="img-fluid h-100 w-100 rounded-circle">
+</div>

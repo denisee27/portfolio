@@ -1,0 +1,86 @@
+<div class="row mb-4">
+    <div class="col-sm-12 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="d-flex flex-nowrap align-items-center">
+                        <button class="btn btn-secondary btn-sm me-3" (click)="back()" title="Kembali">
+                            <i class="material-icons">arrow_back</i>
+                        </button>
+                        <h4 class="card-title col-12 lh-0 m-0">Detail Role</h4>
+                    </div>
+                    <div class="text-center" *ngIf="!data.id">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div *ngIf="data.id" class="row mt-3">
+                        <div class="col-md-8">
+                            <div class="form-floating mb-4">
+                                <input type="text" [value]="data.name" placeholder="..." class="form-control" disabled>
+                                <label>Name</label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-check-label">Access Dashboard Customer : <strong>{{ data.dashboard_access?.customer ? "Yes" : "No" }}</strong></label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-check-label">Access Dashboard Vendor : <strong>{{ data.dashboard_access?.vendor ? "Yes" : "No" }}</strong></label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-check-label"> Access Dashboard Customer vs Vendor : <strong>{{ data.dashboard_access?.customer_vendor ? "Yes" : "No" }}</strong></label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-check-label"> Access Dashboard Finance : <strong>{{ data.dashboard_access?.finance ? "Yes" : "No" }}</strong></label>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-check-label"> Access Dashboard Timeline &amp; Budget : <strong>{{ data.dashboard_access?.timeline ? "Yes" : "No" }}</strong></label>
+                            </div>
+                            <div class=" mb-4">
+                                <label class="form-check-label"> Status : <strong>{{ data.status ? "Active" : "Inactive" }}</strong></label>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="fw-bold mb-2">Menu Access</div>
+                                    <ul *ngIf="navList">
+                                        <ng-template ngFor let-item [ngForOf]="rootNav">
+                                            <li *ngIf="isRootMenuChecked(item.childs)" class="w-75 py-1">
+                                                <div class="d-flex flex-nowrap justify-content-between">
+                                                    <div>
+                                                        {{item.name}}
+                                                    </div>
+                                                    <div class="d-flex flex-nowrap ps-4" *ngIf="!item.childs.length">
+                                                        <ng-template ngFor let-p [ngForOf]="item.action">
+                                                            <span class="ms-3" *ngIf="isPermissionChecked(p, item.link)">
+                                                                <em>{{p}}</em>
+                                                            </span>
+                                                        </ng-template>
+                                                    </div>
+                                                </div>
+                                                <ul *ngIf="item.childs.length">
+                                                    <ng-template ngFor let-subitem [ngForOf]="item.childs">
+                                                        <li *ngIf="isMenuChecked(subitem)" class="w-100 py-1">
+                                                            <div class="d-flex flex-nowrap justify-content-between">
+                                                                <div>{{subitem.name}}</div>
+                                                                <div class="d-flex flex-nowrap ps-4">
+                                                                    <ng-template ngFor let-p [ngForOf]="subitem.action">
+                                                                        <div class="ms-3" *ngIf="isPermissionChecked(p, subitem.link)">
+                                                                            <em>{{p}}</em>
+                                                                        </div>
+                                                                    </ng-template>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ng-template>
+                                                </ul>
+                                            </li>
+                                        </ng-template>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

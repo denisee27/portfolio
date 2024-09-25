@@ -1,0 +1,78 @@
+<div class="row mb-4">
+    <div class="col-sm-12 mx-auto">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <h4 class="card-title col-12 mb-4">Add User</h4>
+                    <form #theForm="ngForm" (ngSubmit)="submitForm(formGroup)" novalidate class="col-md-8">
+                        <div [formGroup]="formGroup">
+                            <div class="form-floating mb-4">
+                                <input type="text" formControlName="nik" [class.is-invalid]="formGroup.get('nik')?.invalid && (theForm.submitted || formGroup.get('nik')?.touched)" placeholder="..." class="form-control" required>
+                                <label>NIK</label>
+                                <div class="text-danger position-absolute text-end w-100" *ngIf="formGroup.get('nik')?.invalid && (theForm.submitted || formGroup.get('nik')?.touched)">
+                                    <small *ngIf="formGroup.get('nik')?.errors?.required">Please type nik</small>
+                                    <small *ngIf="formGroup.get('nik')?.errors?.serverError">{{ formGroup.get("nik")?.errors?.serverError }}</small>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <ng-select class="form-control" placeholder="-" formControlName="role_id" loadingText="Loading..." [class.is-invalid]="formGroup.get('role_id')?.invalid && (theForm.submitted || formGroup.get('role_id')?.touched)" required>
+                                    <ng-option *ngFor="let item of roleList" [value]="item.id">{{item.name}}</ng-option>
+                                </ng-select>
+                                <label class="required">Role</label>
+                                <div class="text-danger position-absolute text-end w-100" *ngIf="formGroup.get('role_id')?.invalid && (theForm.submitted || formGroup.get('role_id')?.touched)">
+                                    <small *ngIf="formGroup.get('role_id')?.errors?.required">Please select role</small>
+                                    <small *ngIf="formGroup.get('role_id')?.errors?.serverError">{{ formGroup.get("role_id")?.errors?.serverError }}</small>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" formControlName="name" [class.is-invalid]="formGroup.get('name')?.invalid && (theForm.submitted || formGroup.get('name')?.touched)" placeholder="..." class="form-control" required>
+                                <label>Name</label>
+                                <div class="text-danger position-absolute text-end w-100" *ngIf="formGroup.get('name')?.invalid && (theForm.submitted || formGroup.get('name')?.touched)">
+                                    <small *ngIf="formGroup.get('name')?.errors?.required">Please type name</small>
+                                    <small *ngIf="formGroup.get('name')?.errors?.serverError">{{ formGroup.get("name")?.errors?.serverError }}</small>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="email" [email]="true" formControlName="email" [class.is-invalid]="formGroup.get('email')?.invalid && (theForm.submitted || formGroup.get('email')?.touched)" placeholder="..." class="form-control" required>
+                                <label>Email</label>
+                                <div class="text-danger position-absolute text-end w-100" *ngIf="formGroup.get('email')?.invalid && (theForm.submitted || formGroup.get('email')?.touched)">
+                                    <small *ngIf="formGroup.get('email')?.errors?.required">Please type email</small>
+                                    <small *ngIf="formGroup.get('email')?.errors?.email">Email is invalid</small>
+                                    <small *ngIf="formGroup.get('email')?.errors?.serverError">{{ formGroup.get("email")?.errors?.serverError }}</small>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="tel" formControlName="phone" [class.is-invalid]="formGroup.get('phone')?.invalid && (theForm.submitted || formGroup.get('phone')?.touched)" placeholder="..." class="form-control">
+                                <label>Phone Number</label>
+                                <div class="text-danger position-absolute text-end w-100" *ngIf="formGroup.get('phone')?.invalid && (theForm.submitted || formGroup.get('phone')?.touched)">
+                                    <small *ngIf="formGroup.get('phone')?.errors?.serverError">{{ formGroup.get("phone")?.errors?.serverError }}</small>
+                                </div>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="text" [minlength]="6" formControlName="password" [class.is-invalid]="formGroup.get('password')?.invalid && (theForm.submitted || formGroup.get('password')?.touched)" placeholder="..." class="form-control" required>
+                                <label>Password</label>
+                                <div class="text-danger position-absolute text-end w-100" *ngIf="formGroup.get('password')?.invalid && (theForm.submitted || formGroup.get('password')?.touched)">
+                                    <small *ngIf="formGroup.get('password')?.errors?.required">Please type password</small>
+                                    <small *ngIf="formGroup.get('password')?.errors?.minlength">Minimum 6 character</small>
+                                    <small *ngIf="formGroup.get('password')?.errors?.serverError">{{ formGroup.get("password")?.errors?.serverError }}</small>
+                                </div>
+                            </div>
+                            <div class="form-check form-switch mb-4">
+                                <input class="form-check-input" type="checkbox" formControlName="status" id="flexSwitchCheckDefault" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Status : <strong>{{ formGroup.get("status")?.value ? "Active" : "Inactive" }}</strong></label>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-top pt-1">
+                            <div>&nbsp;</div>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary" (click)="back()" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">close</i> &nbsp; Cancel</button>
+                                &nbsp;
+                                <button type="submit" class="btn btn-primary" [attr.disabled]="loading.status ? 'disabled' : null"><i class="material-icons">save</i> &nbsp; Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

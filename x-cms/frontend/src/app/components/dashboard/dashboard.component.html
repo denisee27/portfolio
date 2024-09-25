@@ -1,0 +1,42 @@
+<div *ngIf="dashboardLoading" class="d-flex w-100 h-100 justify-content-center align-items-center">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+<div *ngIf="!dashboardLoading" class="dashboard">
+    <div *ngIf="!canAccess" class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body" (click)="ngOnInit()">
+                    <h4>Hi {{userData.name}}, welcome to Profile CMS App</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="canAccess!=null">
+        <ul ngbNav #nav="ngbNav" [(activeId)]="activeTab" class="nav-tabs bg-light p-2 fw-bold rounded">
+            <li *ngIf="canAccess?.management" [ngbNavItem]="1">
+                <a ngbNavLink>Management</a>
+                <ng-template ngbNavContent>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <app-dashboard-management></app-dashboard-management>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li *ngIf="canAccess?.employee" [ngbNavItem]="2">
+                <a ngbNavLink>Employee</a>
+                <ng-template ngbNavContent>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <app-dashboard-employee></app-dashboard-employee>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+    </ng-container>
+</div>

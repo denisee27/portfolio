@@ -1,0 +1,23 @@
+<div class="bg-light rounded">
+    <div class="row">
+        <div class="col-12">
+            <webcam
+                [trigger]="triggerObservable"
+                (imageCapture)="handleImage($event)"
+                [allowCameraSwitch]="true"
+                [imageQuality]="0.8"
+                (initError)="handleInitError($event)">
+            </webcam>
+        </div>
+        <div class="col-12">
+            <div class="d-flex justify-content-end py-1 px-2">
+                <button type="button" (click)="cancel()" class="btn btn-secondary">
+                    Cancel
+                </button>&nbsp;
+                <button type="button" (click)="triggerSnapshot()" class="btn btn-primary">
+                    Take
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

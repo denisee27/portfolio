@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="col-12 col-md-5 mx-auto p-4">
+        <div class="card m-md-4">
+            <div class="card-body">
+                <div class="text-center">
+                    <div>
+                        <img [src]="'/assets/logo.png'" style="max-width: 100px;">
+                    </div>
+                    <div>
+                        <h4 class="fw-bold pt-3">Login</h4>
+                        <p class="text-muted fw-bold">
+                            Type your Email &amp; Password.
+                        </p>
+                    </div>
+                </div>
+                <form class="p-3 col-12" [formGroup]="loginForm" #thisForm="ngForm" (ngSubmit)="submitForm(loginForm)" novalidate>
+                    <div class="form-floating mb-4">
+                        <input type="email" formControlName="email" [class.is-invalid]="loginForm.get('email')?.invalid && (thisForm.submitted || loginForm.get('email')?.touched)" placeholder="name@example.com" class="form-control" required>
+                        <label>Email</label>
+                        <div class="text-danger position-absolute text-end w-100" *ngIf="loginForm.get('email')?.invalid && (thisForm.submitted || loginForm.get('email')?.touched)">
+                            <small class="small" *ngIf="loginForm.get('email')?.errors?.required">Type email</small>
+                            <small *ngIf="loginForm.get('email')?.errors?.pattern">Email isn't valid</small>
+                            <small *ngIf="loginForm.get('email')?.errors?.serverError">{{loginForm.get('email')?.errors?.serverError}}</small>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-4">
+                        <input type="password" formControlName="password" [class.is-invalid]="loginForm.get('password')?.invalid && (thisForm.submitted || loginForm.get('password')?.touched)" placeholder="Password" class="form-control" required>
+                        <label>Password</label>
+                        <div class="text-danger position-absolute text-end w-100" *ngIf="loginForm.get('password')?.invalid && (thisForm.submitted || loginForm.get('password')?.touched)">
+                            <small *ngIf="loginForm.get('password')?.errors?.required">Type password</small>
+                            <small *ngIf="loginForm.get('password')?.errors?.serverError">{{loginForm.get('password')?.errors?.serverError}}</small>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-md-4 col-sm-12">
+                            <button type="submit" [attr.disabled]="loading.status?'disabled':null" class="btn btn-primary py-2 px-4 w-100">
+                                Login
+                            </button>
+                        </div>
+                        <div class="col-md-4 col-sm-12 mt-md-0 mt-3 text-center text-md-end d-md-flex align-items-center justify-content-end">
+                            <a [class.disabled]="loading.status" class="btn-link text-secondary text-nowrap" routerLink="/forgot-password">
+                                Forgot password?
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

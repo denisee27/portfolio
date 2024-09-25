@@ -1,0 +1,160 @@
+<div class="mb-4 mt-1">
+    <h4 class="card-title me-2 mb-md-0 mb-3">Employee Dashboard</h4>
+</div>
+<div class="row mb-4">
+    <div class="col-md-12 d-md-flex justify-content-between align-items-center">
+        <div class="row flex-fill d-md-flex justify-content-end">
+            <div class="col-md-4 mb-2">
+                <div class="input-group">
+                    <input type="text" readonly [value]="selectedDate" placeholder="Date ranges" class="form-control" />
+                    <button (click)="calendarDialog.show()" class="btn btn-sm btn-outline-primary" type="button"
+                        [attr.disabled]="loading.status ? 'disabled' : null">
+                        <i class="material-icons"> date_range </i>
+                    </button>
+                </div>
+            </div>
+            <!-- <div class="col-md-4 mb-2">
+                <select class="form-select" [(ngModel)]="query.company_id" [disabled]="loading.status"
+                    (ngModelChange)="getData()">
+                    <option [value]="''">- All Company Code -</option>
+                    <option *ngFor="let c of companyList" [value]="c.id">{{ c.code }} - {{ c.name }}</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-2">
+                <select class="form-select" [(ngModel)]="query.po_type" [disabled]="loading.status"
+                    (ngModelChange)="getData()">
+                    <option [value]="''">- All PO Type -</option>
+                    <option value="dummy">DUMMY</option>
+                    <option value="po">PO Document</option>
+                    <option value="doc">DOC Document</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-2">
+                <select class="form-select" [(ngModel)]="query.status" [disabled]="loading.status"
+                    (ngModelChange)="getData()">
+                    <option [value]="''">- All Status Asset -</option>
+                    <option value="1">Good</option>
+                    <option value="2">Bad Can Be Repaired</option>
+                    <option value="3">Bad Cannot Repaired</option>
+                    <option value="4">Lost</option>
+                    <option value="5">Other</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-2">
+                <select class="form-select" [(ngModel)]="query.class" [disabled]="loading.status"
+                    (ngModelChange)="getData(); getName($event); this.query.subClass = ''">
+                    <option [value]="''">- All Class -</option>
+                    <option *ngFor="let c of classList" [value]="c.id">{{ c.code }} - {{ c.name }}</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-2">
+                <select class="form-select" [(ngModel)]="query.subClass" [disabled]="loading.status"
+                    (ngModelChange)="getData()">
+                    <option [value]="''">- All Sub Class -</option>
+                    <ng-container *ngIf="query.class != ''">
+                        <option *ngFor="let c of subClassList | filter : 'category_id' : query.class" [value]="c.id">{{
+                            c.code }} - {{ c.name }}</option>
+                    </ng-container>
+                </select>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-info text-white">
+            <div *ngIf="loading.status" class="card-body text-center">
+                <div class="spinner-border text-white" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div *ngIf="!loading.status" class="card-body text-center">
+                <div class="mb-1 small">All Time</div>
+                <h5>Total Presence</h5>
+                <h4>{{ (50 | number) || 0 }} Day</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white">
+            <div *ngIf="loading.status" class="card-body text-center">
+                <div class="spinner-border text-white" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div *ngIf="!loading.status" class="card-body text-center">
+                <div class="mb-1 small">{{ selectedDate }}</div>
+                <h5>Presence</h5>
+                <h4>{{ (9 | number) || 0 }} Day</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-white">
+            <div *ngIf="loading.status" class="card-body text-center">
+                <div class="spinner-border text-white" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div *ngIf="!loading.status" class="card-body text-center">
+                <div class="mb-1 small">{{ selectedDate }}</div>
+                <h5>Total Absence</h5>
+                <h4>{{ (5 | number) || 0 }} Day</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mb-4">
+    <div *ngIf="loading.status || topLoading" class="text-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div [class.d-none]="loading.status || topLoading">
+        <div class="row">
+            <div class="col-md-6 mb-4" #colTransactionChart>
+                <div class="card">
+                    <div class="card-body position-relative">
+                        <button
+                            (click)="colTransactionChart.classList.toggle('col-12');colTransactionChart.classList.toggle('col-md-6'); colTransactionChart.scrollIntoView({behavior:'smooth', block: (colTransactionChart.classList.contains('col-12')?'center':'end')});"
+                            class="btn btn-outline-primary position-absolute end-0 btn-sm me-2 top-0 mt-2">
+                            <i class="material-icons">
+                                {{colTransactionChart.classList.contains('col-md-6')?'open_in_full':'close_fullscreen'}}
+                            </i>
+                        </button>
+                        <h5 class="text-center">Total Absence</h5>
+                        <canvas #transactionChart></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4" #colabsenceProgress>
+                <div class="card">
+                    <div class="card-body position-relative">
+                        <button
+                            (click)="colabsenceProgress.classList.toggle('col-12');colabsenceProgress.classList.toggle('col-md-6');colabsenceProgress.scrollIntoView({behavior:'smooth', block: (colabsenceProgress.classList.contains('col-12')?'center':'end')});"
+                            class="btn btn-outline-primary position-absolute end-0 btn-sm me-2 top-0 mt-2">
+                            <i class="material-icons">
+                                {{colabsenceProgress.classList.contains('col-md-6')?'open_in_full':'close_fullscreen'}}
+                            </i>
+                        </button>
+                        <h5 class="text-center">Absence Progress</h5>
+                        <canvas #absenceProgress></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #calendarModal let-modal>
+    <div class="d-flex justify-content-center">
+        <ngx-daterangepicker-material [showCancel]="true" [locale]="{ cancelLabel: 'Reset' }" [ranges]="ranges"
+            [startDate]="date_range.start" [endDate]="date_range.end" [alwaysShowCalendars]="true"
+            (choosedDate)="calendarDialog.submit($event)"
+            (cancelClicked)="calendarDialog.cancel()"></ngx-daterangepicker-material>
+    </div>
+</ng-template>
+<div class="d-none modal-transparent lg modal-lg">&nbsp;</div>

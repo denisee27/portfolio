@@ -1,0 +1,74 @@
+<div *ngIf="loading.status" class="loading"></div>
+<div class="w-100 h-100">
+    <app-sidenav *ngIf="isLoggedIn()"></app-sidenav>
+    <app-navbar *ngIf="isLoggedIn()"></app-navbar>
+    <div class="flex-grow-1 d-flex flex-column">
+        <div class="container-fluid content-main pb-3" [ngClass]="{'navbar-opened':isLoggedIn(), 'sidenav-opened':(sidenav.status | async) && isLoggedIn()}">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoggedIn() && (auth.isTimeOut | async)" class="position-fixed w-100 h-100 bg-dark bg-opacity-50 top-0 start-0 auth-timeout">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-4 col-12">
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="h4 fw-bold lh-1">Session timeout</div>
+                        <div class="text-muted">Please type your password</div>
+                    </div>
+                    <form class="auth-form" #authForm="ngForm" (ngSubmit)="submitLogin(loginForm)" novalidate>
+                        <div [formGroup]="loginForm">
+                            <div class="form-floating mb-4">
+                                <input type="email" required readonly="readonly" [value]="auth.userData?.email" placeholder="name@example.com" class="form-control">
+                                <label for="floatingInput">{{'Email'}}</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="password" tabindex="1" formControlName="password" [class.is-invalid]="loginForm.get('password')?.invalid && (authForm.submitted || loginForm.get('password')?.touched)" class="form-control mb-0" id="floatingPassword" placeholder="Password" required [appAutoFocus]="true">
+                                <label for="floatingPassword">{{'Password'}}</label>
+                                <div class="text-danger position-absolute w-100" *ngIf="loginForm.get('password')?.invalid && (authForm.submitted || loginForm.get('password')?.touched)">
+                                    <small *ngIf="loginForm.get('password')?.errors?.required">Type your password</small>
+                                    <small *ngIf="loginForm.get('password')?.errors?.serverError">{{loginForm.get('password')?.errors?.serverError}}</small>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div>
+                                        <div class="spinner-border text-primary" role="status" *ngIf="loading.status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" tabindex="3" class="btn btn-outline-danger" (click)="authLogout()" [attr.disabled]="loading.status ? 'disabled' : null">Logout</button>
+                                    &nbsp;
+                                    <button class="btn btn-primary" tabindex="2" type="submit" [disabled]="loading.status" [attr.disabled]="loading.status ? 'disabled' : null">Login</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #theModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Unsaved changes</h5>
+    </div>
+    <div class="modal-body">
+        It looks like you have been editing something.<br>
+        If you leave before saving, your changes will be lost.
+    </div>
+    <div class="modal-footer d-flex justify-content-between">
+        <div>
+            &nbsp;
+        </div>
+        <div class="text-end">
+            <button type="button" class="btn btn-primary" (click)="modal.dismiss()">Cancel</button>
+            &nbsp;
+            <button type="button" class="btn btn-secondary" (click)="modal.close(true)">Leave</button>
+        </div>
+    </div>
+</ng-template>
+

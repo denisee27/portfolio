@@ -1,0 +1,158 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 d-md-flex align-items-center">
+                        <h4 class="card-title me-2 mb-md-0 mb-3">User Role</h4>
+                    </div>
+                    <div class="col-md-6 col-sm-12 d-flex justify-content-end">
+                        <div *ngIf="!pageQuery.isSearch">
+                            <a *ngIf="permission.create" class="btn btn-primary" [class.disabled]="loading.status" routerLink="add"> Create </a>
+                            <button title="Refresh" [attr.disabled]="loading.status ? 'disabled' : null" class="btn btn-secondary ms-1" (click)="getData()">
+                                <i class="material-icons">refresh</i>
+                            </button>
+                            <button title="Search" [attr.disabled]="loading.status ? 'disabled' : null" class="btn btn-secondary ms-1" (click)="pageQuery.isSearch = true">
+                                <i class="material-icons">search</i>
+                            </button>
+                        </div>
+                        <div *ngIf="pageQuery.isSearch" class="w-100">
+                            <div class="input-group has-search">
+                                <span class="input-group-text pt-0 pb-0 bg-white border-secondary">
+                                    <i class="material-icons">search</i>
+                                </span>
+                                <input type="search" [appAutoFocus]="true" [(ngModel)]="pageQuery.queryPage.q" (keyup)="pageQuery.searchData($event)" class="form-control border-start-0 ps-1 shadow-none border-secondary bg-light" placeholder="Type & Hit Enter" />
+                                <button title="Search" class="btn btn-secondary" [attr.disabled]="loading.status ? 'disabled' : null" (click)="pageQuery.changeRoute({ q: '' }); pageQuery.isSearch = false">
+                                    <i class="material-icons">close</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-2">
+                    <div class="col-12">
+                        <div class="text-center h4 p-3" *ngIf="!data?.data?.length">
+                            <div *ngIf="loading.status">
+                                <div class="spinner-grow" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                            <div *ngIf="!loading.status">No data found..</div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" *ngIf="data?.data?.length">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>Name</th>
+                                        <th *ngIf="permission.update">Status</th>
+                                        <th>Created at</th>
+                                        <th class="text-center">
+                                            <i class="material-icons">more_vert</i>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of data?.data; let i = index">
+                                        <td class="text-center">
+                                            {{ data.from + i }}
+                                        </td>
+                                        <td>
+                                            <a [class.disabled]="item.access[0]=='*'?'disabled':null" routerLink="{{item.id}}">
+                                                {{ item.name }}
+                                            </a>
+                                        </td>
+                                        <td *ngIf="permission.update" nowrap>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" [disabled]="loading.status || item.access[0]=='*'" type="checkbox" id="status_{{ i }}" (change)="setStatus(item)" [attr.checked]="item.status == 1 ? 'checked' : null" />
+                                                <label class="form-check-label" for="status_{{ i }}">{{ item.status ? "Active" : "Inactive" }}</label>
+                                            </div>
+                                        </td>
+                                        <td nowrap>
+                                            {{ item.created_at | dateFormat : "DD MMM YYYY, HH:mm" }}
+                                        </td>
+                                        <td class="text-center" nowrap>
+                                            <div class="d-flex nav-item justify-content-center" ngbDropdown display="dynamic" placement="bottom-right" container="body">
+                                                <button [disabled]="item.access[0]=='*'" class="btn btn-sm text-primary border-primary border-1 dropdown-toggle" ngbDropdownToggle>Action</button>
+                                                <ul ngbDropdownMenu>
+                                                    <a class="dropdown-item btn-link d-flex align-items-center" [class.disabled]="loading.status" title="Detail" routerLink="{{ item.id }}">
+                                                        <i class="material-icons fs-5 me-3">preview</i>
+                                                        Detail
+                                                    </a>
+
+                                                    <li *ngIf="permission.update">
+                                                        <a class="dropdown-item btn-link d-flex align-items-center" [class.disabled]="loading.status" title="Edit" routerLink="{{ item.id }}/edit">
+                                                            <i class="material-icons fs-5 me-3">edit</i>
+                                                            Edit
+                                                        </a>
+                                                    </li>
+                                                    <li *ngIf="permission.delete">
+                                                        <button [attr.disabled]="loading.status || item.is_vendor || item.is_project_manager || item.is_document_control || item.is_engineer ? 'disabled' : null" class="dropdown-item btn-link d-flex align-items-center" title="Delete" (click)="deleteDialog.show([item.id])">
+                                                            <i class="material-icons fs-5 me-3">delete</i>
+                                                            Delete
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="data?.data?.length" class="d-flex justify-content-between row small">
+                            <div class="col-md-2 small d-flex flex-nowrap row align-items-center">
+                                <div class="col-5 d-flex align-items-center">Limit :</div>
+                                <select style="height: 25px;" class="form-select form-select-sm col-6 w-50" [attr.disabled]="loading.status ? 'disabled' : null" [(ngModel)]="pageQuery.queryPage.limit" (change)="pageQuery.changeRoute({limit:pageQuery.queryPage.limit});">
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex flex-nowrap align-items-center justify-content-center justify-content-md-end">
+                                <div class="text-nowrap">
+                                    Total: {{data.total || 0}}
+                                </div>
+                                <div class="text-nowrap">
+                                    <button (click)="pageQuery.changeRoute({page:1});" class="btn btn-sm border-0 m-1 p-1" [attr.disabled]="loading.status || data.current_page===1 || !data.prev_page_url ? 'disabled' : null">
+                                        <span class="material-icons">first_page</span>
+                                    </button>
+                                    <button (click)="pageQuery.changeRoute({page:(data.prev_page_url).split('page=')[1]});" class="btn btn-sm border-0 m-1 p-1" [attr.disabled]="loading.status || data.current_page===1 || !data.prev_page_url ? 'disabled' : null">
+                                        <span class="material-icons">navigate_before</span>
+                                    </button>
+                                    <span>
+                                        {{data.current_page || 1}}/{{data.last_page || '&infintie;'}}
+                                    </span>
+                                    <button (click)="pageQuery.changeRoute({page:(data.next_page_url).split('page=')[1]});" class="btn btn-sm border-0 m-1 p-1" [attr.disabled]="loading.status || !data.next_page_url || pageQuery.queryPage.page===data.last_page ? 'disabled' : null">
+                                        <span class="material-icons">navigate_next</span>
+                                    </button>
+                                    <button (click)="pageQuery.changeRoute({page:data.last_page});" class="btn btn-sm border-0 m-1 p-1" [attr.disabled]="loading.status || !data.next_page_url || pageQuery.queryPage.page===data.last_page || !data.last_page ? 'disabled' : null">
+                                        <span class="material-icons">last_page</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #deleteModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Delete</h5>
+    </div>
+    <div class="modal-body">Are you sure want to delete this data?</div>
+    <div class="modal-footer d-flex justify-content-between">
+        <div>
+            <div class="spinner-border text-primary" role="status" *ngIf="deleteDialog.isDeleting && loading.status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="text-end">
+            <button type="button" class="btn btn-primary" (click)="modal.close()" [attr.disabled]="loading.status ? 'disabled' : null">Cancel</button>
+            &nbsp;
+            <button type="button" class="btn btn-danger" (click)="deleteDialog.submit()" [attr.disabled]="loading.status ? 'disabled' : null">Delete</button>
+        </div>
+    </div>
+</ng-template>
