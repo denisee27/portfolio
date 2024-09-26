@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('portfolio-images', function (Blueprint $table) {
+        Schema::create('portfolio_images', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('portfolio_id');
             $table->foreign('portfolio_id')->references('id')->on('portfolios')->cascadeOnDelete();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('portfolio-images');
+        Schema::dropIfExists('portfolio_images');
     }
 };

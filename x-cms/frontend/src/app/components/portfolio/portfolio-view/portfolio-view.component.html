@@ -8,10 +8,9 @@
                     </div>
                     <div class="col-md-6 col-sm-12 d-flex justify-content-end">
                         <div *ngIf="!pageQuery.isSearch">
-                            <button *ngIf="permission.create" [attr.disabled]="loading.status ? 'disabled' : null" class="btn btn-primary" title="Create" (click)="createDialog.show()">
+                            <button *ngIf="permission.create" [attr.disabled]="loading.status ? 'disabled' : null" class="btn btn-primary" title="Create" (click)="createDialog.show(null,'/create')">
                                 Create
                             </button>
-                            <!-- <a *ngIf="permission.create" class="btn btn-primary" [class.disabled]="loading.status" routerLink="add"> Create </a> -->
                             <button title="Refresh" [attr.disabled]="loading.status ? 'disabled' : null" class="btn btn-secondary ms-1" (click)="getData()">
                                 <i class="material-icons">refresh</i>
                             </button>
@@ -63,12 +62,12 @@
                                             {{ data.from + i }}
                                         </td>
                                         <td>
-                                            <a routerLink="{{item.id}}">
+                                            <a (click)="detailDialog.show(item)" class="text-info" style="cursor: pointer;">
                                                 {{ item.name }}
                                             </a>
                                         </td>
                                         <td>
-                                            {{ item.email }}
+                                            {{ item.section }}
                                         </td>
                                         <td *ngIf="permission.update" nowrap>
                                             <div class="form-check form-switch">
@@ -82,15 +81,13 @@
                                         <td class="text-center" nowrap>
                                             <div class="d-flex nav-item justify-content-center" ngbDropdown display="dynamic" placement="bottom-right" container="body">
                                                 <button  class="btn btn-sm text-primary border-primary border-1 dropdown-toggle" ngbDropdownToggle>Action</button>
-                                                <!-- <button [disabled]="loading.status || isMe(item)" class="btn btn-sm text-primary border-primary border-1 dropdown-toggle" ngbDropdownToggle>Action</button> -->
                                                 <ul ngbDropdownMenu>
-                                                    <a class="dropdown-item btn-link d-flex align-items-center" [class.disabled]="loading.status" title="Detail" routerLink="{{ item.id }}">
+                                                    <a class="dropdown-item btn-link d-flex align-items-center" [class.disabled]="loading.status" title="Detail" (click)="detailDialog.show(item)">
                                                         <i class="material-icons fs-5 me-3">preview</i>
                                                         Detail
                                                     </a>
-
                                                     <li *ngIf="permission.update">
-                                                        <a class="dropdown-item btn-link d-flex align-items-center" [class.disabled]="loading.status" title="Edit" routerLink="{{ item.id }}/edit">
+                                                        <a class="dropdown-item btn-link d-flex align-items-center" [class.disabled]="loading.status" title="Edit" (click)="createDialog.show(item,'/update')">
                                                             <i class="material-icons fs-5 me-3">edit</i>
                                                             Edit
                                                         </a>
@@ -158,15 +155,11 @@
             <li ngbNavItem>
                 <a ngbNavLink>Image</a>
                 <ng-template ngbNavContent style="height: fit-content;">
-                    <!-- <div (click)="browsePhoto()" style="height: 250px;" class="upload d-flex justify-content-center align-items-center flex-column w-50 m-auto">
-                        <i class="material-icons">upload</i>
-                        <div>Upload Gambar</div>
-                    </div> -->
                     <input type="file" class="d-none" id="uploadImage"  accept="image/jpg,image/jpeg,image/png" (change)="uploadPhoto($event)">
                     <div class="d-flex flex-wrap justify-content-start">
                         <div *ngFor="let p of createDialog.images; index as x" >
                             <div (click)="photoDialog.show(p)" class="me-2 mb-2 rounded border position-relative" style="height: 117px; width: 117px; background-position: center; background-size: cover" [style.background-image]="'url(' + p.photo + ')'">
-                                <button *ngIf="!p.loading" class="btn btn-sm btn-danger position-absolute" style="height: 25px; width: 25px; margin-top: -5px; margin-left: -5px; padding-right: 10px;" (click)="removePhoto(x)">
+                                <button *ngIf="!p.loading" class="btn btn-sm btn-danger position-absolute" style="height: 25px; width: 25px; margin-top: -5px; margin-left: -5px; padding-right: 10px;" (click)="removePhoto(x,p)">
                                     <i class="material-icons">close</i>
                                 </button>
                                 <div *ngIf="p.loading" class="w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255, 255, 255, 0.5)">
@@ -238,13 +231,78 @@
             </div>
         </div>
         <div class="text-end">
-            <button type="button" class="btn btn-danger" (click)="modal.close()" [attr.disabled]="loading.status ? 'disabled' : null">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="createDialog.close()" [attr.disabled]="loading.status ? 'disabled' : null">Cancel</button>
             &nbsp;
             <button type="submit" class="btn btn-primary"  [attr.disabled]="loading.status ? 'disabled' : null">Submit</button>
         </div>
     </div>
 </div>
 </form>
+</ng-template>
+
+
+<ng-template #detailModal let-modal>
+    <div class="col-md-12">
+    <div class="modal-header">
+        <h5 class="modal-title">Detail Portfolio</h5>
+    </div>
+    <div class="modal-body">
+        <ul ngbNav #nav="ngbNav" class="nav-tabs mb-4">
+            <li ngbNavItem>
+                <a ngbNavLink>Image</a>
+                <ng-template ngbNavContent style="height: fit-content;">
+                    <input type="file" class="d-none" id="uploadImage"  accept="image/jpg,image/jpeg,image/png" (change)="uploadPhoto($event)">
+                    <div class="d-flex flex-wrap justify-content-start">
+                        <div *ngFor="let p of detailDialog.data.images; index as x" >
+                            <div (click)="photoDialog.show(p,true)" class="me-2 mb-2 rounded border position-relative" style="height: 117px; width: 117px; background-position: center; background-size: cover" [style.background-image]="'url(' + assetUrl + p.photo + ')'">
+                                <div *ngIf="p.loading" class="w-100 h-100 d-flex justify-content-center align-items-center" style="background: rgba(255, 255, 255, 0.5)">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li ngbNavItem>
+                <a ngbNavLink>Description</a>
+                <ng-template ngbNavContent>
+                    <div class="form-floating mb-4">
+                        <input disabled type="text" placeholder="..." class="form-control" [value]="detailDialog.data.name">
+                        <label>Name</label>
+                    </div>
+                    <div class="row">
+                        <div class="form-floating mb-4 col-6">
+                            <input disabled type="section" placeholder="..." class="form-control px-3" [value]="detailDialog.data.section">
+                            <label class="mx-3">Section</label>
+                        </div>
+                        <div class="form-floating mb-4 col-6">
+                            <input disabled type="number" placeholder="..." class="form-control px-3" [value]="detailDialog.data.order">
+                            <label class="mx-3">Order</label>
+                        </div>
+                    </div>
+                    <div #editorContainer class="editor-container"></div>
+                    <div>
+                        <H5>Description</H5>
+                        <div [innerHTML]="detailDialog.data.description"></div>
+                    </div>
+                </ng-template>
+                </li>
+            </ul>
+            <div [ngbNavOutlet]="nav"></div>
+    </div>
+    <div class="mx-3 mb-3 d-flex justify-content-between">
+        <div>
+            <div class="spinner-border text-primary" role="status" *ngIf="deleteDialog.isDeleting && loading.status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div class="text-end">
+            <button type="button" class="btn btn-danger" (click)="modal.close()" [attr.disabled]="loading.status ? 'disabled' : null">Cancel</button>
+        </div>
+    </div>
+</div>
 </ng-template>
 
 <ng-template #deleteModal let-modal>
