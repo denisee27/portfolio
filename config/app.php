@@ -56,7 +56,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'asset_url' => env('ASSET_URL'),
+    'asset' => env('APP_ASSET_URL', 'http://localhost/profile/uploads/'),
+
 
     /*
     |--------------------------------------------------------------------------
