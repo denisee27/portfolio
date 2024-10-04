@@ -628,14 +628,14 @@ section {
   background-color: #0563bb;
 }
 .portfolio-details .portfolio-info {
-  padding: 30px;
+  padding: 10px 30px;
   box-shadow: 0px 0 30px rgba(69, 80, 91, 0.08);
 }
 .portfolio-details .portfolio-info h3 {
   font-size: 22px;
   font-weight: 700;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #eee;
 }
 .portfolio-details .portfolio-info ul {
@@ -647,15 +647,16 @@ section {
   margin-top: 10px;
 }
 .portfolio-details .portfolio-description {
-  padding-top: 30px;
+  padding-top: 10px;
 }
 .portfolio-details .portfolio-description h2 {
   font-size: 26px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .portfolio-details .portfolio-description p {
   padding: 0;
+  font-size: 14px;
 }
 
 /*--------------------------------------------------------------

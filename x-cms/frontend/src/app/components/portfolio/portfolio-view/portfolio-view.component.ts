@@ -60,6 +60,7 @@ editorModules = {
         ['bold', 'italic', 'underline'],
         ['blockquote', 'code-block'],
         [{ 'list': 'bullet' }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
         ['clean'],
     ]
   };
@@ -125,6 +126,9 @@ createDialog: any = {
         section: new FormControl(),
         status: new FormControl(1),
         order: new FormControl(),
+        frontend: new FormControl(),
+        backend: new FormControl(),
+        category: new FormControl(),
         description: new FormControl(),
     }),
     isDeleting: false,
@@ -144,6 +148,9 @@ createDialog: any = {
                 section: item.section,
                 status: item.status,
                 order: item.order,
+                category: item.category,
+                frontend: item.frontend,
+                backend: item.backend,
                 description: item.description
             });
         }
@@ -154,7 +161,6 @@ createDialog: any = {
             this.el.nativeElement.querySelectorAll('[formcontrolname].ng-invalid')?.[0]?.focus();
             return;
         }
-        // form.disable();
         let fdata = new FormData();
         let uploadImg = this.createDialog.images.filter((e:any) => {
             return e.source != null
@@ -181,6 +187,9 @@ createDialog: any = {
                 this.createDialog.formGroup.reset({
                     name: null,
                     section: null,
+                    category: null,
+                    backend: null,
+                    frontend: null,
                     status: 1,
                     description: null
                 });
@@ -195,6 +204,9 @@ createDialog: any = {
         this.createDialog.formGroup.reset({
             name: null,
             section: null,
+            category: null,
+            backend: null,
+            frontend: null,
             status: 1,
             description: null
         });

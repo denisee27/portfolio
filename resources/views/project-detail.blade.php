@@ -56,15 +56,14 @@
           </div>
 
           <div class="col-lg-4">
-            {{-- <div class="portfolio-info"> --}}
-              {{-- <h3>Project information</h3> --}}
-              {{-- <ul>
-                <li><strong>Category</strong>: Web design</li>
-                <li><strong>Client</strong>: ASU Company</li>
-                <li><strong>Project date</strong>: 01 March, 2020</li>
-                <li><strong>Project URL</strong>: <a href="#">www.example.com</a></li>
-              </ul> --}}
-            {{-- </div> --}}
+            <div class="portfolio-info">
+              <h3>Project information</h3>
+              <ul>
+                <li><strong>Category</strong>: {{ $data->category }}</li>
+                <li><strong>FrontEnd</strong>: {{ $data->frontend }}</li>
+                <li><strong>BackEnd</strong>: {{ $data->backend }}</li>
+              </ul>
+            </div>
             <div class="portfolio-description">
               <h2>{{ $data->name }}</h2>
               <p>

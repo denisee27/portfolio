@@ -4,8 +4,8 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost/profile',
-    assetUrl: 'http://localhost/profile/uploads/', //Always add slash at end of the line
+    apiUrl: 'http://localhost/profile/api',
+    assetUrl: 'http://localhost/profile/api/uploads/', //Always add slash at end of the line
     appName: 'ams_app',
     appKey: '5oOfskbgKrGl4xZp5UKd40fgezO7NnwE'
 };

@@ -180,17 +180,27 @@
                 <a ngbNavLink>Description</a>
                 <ng-template ngbNavContent>
                         <div [formGroup]="createDialog.formGroup">
-                            <div class="form-floating mb-4">
-                                <input type="text" formControlName="name" [class.is-invalid]="createDialog.formGroup.get('name')?.invalid && (theForm.submitted || createDialog.formGroup.get('name')?.touched)" placeholder="..." class="form-control" required>
-                                <label>Name</label>
-                                <div class="text-danger position-absolute text-end w-100" *ngIf="createDialog.formGroup.get('name')?.invalid && (theForm.submitted || createDialog.formGroup.get('name')?.touched)">
-                                    <small *ngIf="createDialog.formGroup.get('name')?.errors?.required">Please type name</small>
-                                    <small *ngIf="createDialog.formGroup.get('name')?.errors?.serverError">{{ createDialog.formGroup.get("name")?.errors?.serverError }}</small>
+                            <div class="row">
+                                <div class="form-floating mb-4 col-6">
+                                    <input type="text" formControlName="name" [class.is-invalid]="createDialog.formGroup.get('name')?.invalid && (theForm.submitted || createDialog.formGroup.get('name')?.touched)" placeholder="..." class="form-control" required>
+                                    <label class="mx-3">Name</label>
+                                    <div class="text-danger position-absolute text-end w-100" *ngIf="createDialog.formGroup.get('name')?.invalid && (theForm.submitted || createDialog.formGroup.get('name')?.touched)">
+                                        <small *ngIf="createDialog.formGroup.get('name')?.errors?.required">Please type name</small>
+                                        <small *ngIf="createDialog.formGroup.get('name')?.errors?.serverError">{{ createDialog.formGroup.get("name")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-4 col-6">
+                                    <input type="text" formControlName="category" [class.is-invalid]="createDialog.formGroup.get('category')?.invalid && (theForm.submitted || createDialog.formGroup.get('category')?.touched)" placeholder="..." class="form-control" required>
+                                    <label class="mx-3">Category</label>
+                                    <div class="text-danger position-absolute text-end w-100" *ngIf="createDialog.formGroup.get('category')?.invalid && (theForm.submitted || createDialog.formGroup.get('category')?.touched)">
+                                        <small *ngIf="createDialog.formGroup.get('category')?.errors?.required">Please type category</small>
+                                        <small *ngIf="createDialog.formGroup.get('category')?.errors?.serverError">{{ createDialog.formGroup.get("category")?.errors?.serverError }}</small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-floating mb-4 col-6">
-                                    <input type="section" formControlName="section" [class.is-invalid]="createDialog.formGroup.get('section')?.invalid && (theForm.submitted || createDialog.formGroup.get('section')?.touched)" placeholder="..." class="form-control px-3" required>
+                                    <input formControlName="section" [class.is-invalid]="createDialog.formGroup.get('section')?.invalid && (theForm.submitted || createDialog.formGroup.get('section')?.touched)" placeholder="..." class="form-control px-3" required>
                                     <label class="mx-3">Section</label>
                                     <div class="text-danger text-end w-100" *ngIf="createDialog.formGroup.get('section')?.invalid && (theForm.submitted || createDialog.formGroup.get('section')?.touched)">
                                         <small *ngIf="createDialog.formGroup.get('section')?.errors?.required">Please type section</small>
@@ -203,6 +213,24 @@
                                     <div class="text-danger text-end w-100" *ngIf="createDialog.formGroup.get('order')?.invalid && (theForm.submitted || createDialog.formGroup.get('order')?.touched)">
                                         <small *ngIf="createDialog.formGroup.get('order')?.errors?.required">Please type order</small>
                                         <small *ngIf="createDialog.formGroup.get('order')?.errors?.serverError">{{ createDialog.formGroup.get("order")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-floating mb-4 col-6">
+                                    <input formControlName="frontend" [class.is-invalid]="createDialog.formGroup.get('frontend')?.invalid && (theForm.submitted || createDialog.formGroup.get('frontend')?.touched)" placeholder="..." class="form-control px-3" required>
+                                    <label class="mx-3">Frontend</label>
+                                    <div class="text-danger text-end w-100" *ngIf="createDialog.formGroup.get('frontend')?.invalid && (theForm.submitted || createDialog.formGroup.get('frontend')?.touched)">
+                                        <small *ngIf="createDialog.formGroup.get('frontend')?.errors?.required">Please type frontend</small>
+                                        <small *ngIf="createDialog.formGroup.get('frontend')?.errors?.serverError">{{ createDialog.formGroup.get("frontend")?.errors?.serverError }}</small>
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-4 col-6">
+                                    <input formControlName="backend" [class.is-invalid]="createDialog.formGroup.get('backend')?.invalid && (theForm.submitted || createDialog.formGroup.get('backend')?.touched)" placeholder="..." class="form-control px-3" required>
+                                    <label class="mx-3">Backend</label>
+                                    <div class="text-danger text-end w-100" *ngIf="createDialog.formGroup.get('backend')?.invalid && (theForm.submitted || createDialog.formGroup.get('backend')?.touched)">
+                                        <small *ngIf="createDialog.formGroup.get('backend')?.errors?.required">Please type backend</small>
+                                        <small *ngIf="createDialog.formGroup.get('backend')?.errors?.serverError">{{ createDialog.formGroup.get("backend")?.errors?.serverError }}</small>
                                     </div>
                                 </div>
                             </div>
@@ -268,18 +296,34 @@
             <li ngbNavItem>
                 <a ngbNavLink>Description</a>
                 <ng-template ngbNavContent>
-                    <div class="form-floating mb-4">
-                        <input disabled type="text" placeholder="..." class="form-control" [value]="detailDialog.data.name">
-                        <label>Name</label>
+                    <div class="row"> 
+                        <div class="form-floating mb-4 col-6">
+                            <input disabled type="text" placeholder="..." class="form-control" [value]="detailDialog.data.name">
+                            <label class="mx-3">Name</label>
+                        </div>
+                        <div class="form-floating mb-4 col-6">
+                            <input disabled type="text" placeholder="..." class="form-control" [value]="detailDialog.data.category">
+                            <label class="mx-3">Category</label>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-floating mb-4 col-6">
-                            <input disabled type="section" placeholder="..." class="form-control px-3" [value]="detailDialog.data.section">
+                            <input disabled placeholder="..." class="form-control px-3" [value]="detailDialog.data.section">
                             <label class="mx-3">Section</label>
                         </div>
                         <div class="form-floating mb-4 col-6">
                             <input disabled type="number" placeholder="..." class="form-control px-3" [value]="detailDialog.data.order">
                             <label class="mx-3">Order</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-floating mb-4 col-6">
+                            <input disabled placeholder="..." class="form-control px-3" [value]="detailDialog.data.frontend">
+                            <label class="mx-3">Frontend</label>
+                        </div>
+                        <div class="form-floating mb-4 col-6">
+                            <input disabled placeholder="..." class="form-control px-3" [value]="detailDialog.data.backend">
+                            <label class="mx-3">Backend</label>
                         </div>
                     </div>
                     <div #editorContainer class="editor-container"></div>

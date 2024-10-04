@@ -10,7 +10,6 @@
 | the IoC container for the system binding all of the various parts.
 |
 */
-
 $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
@@ -51,5 +50,47 @@ $app->singleton(
 | from the actual running of the application and sending responses.
 |
 */
+// $app->configure('jwt');
+// date_default_timezone_set(config('app.timezone'));
+
+
+// $app->middleware([
+//     App\Http\Middleware\CorsMiddleware::class
+// ]);
+
+// $app->middleware([
+//     App\Http\Middleware\ClearEmptyStringMiddleware::class
+// ]);
+
+
+// $app->routeMiddleware([
+//     'auth' => App\Http\Middleware\AuthenticateMiddleware::class,
+//     'public.api' => App\Http\Middleware\PublicApiMiddleware::class,
+// ]);
+
+// $app->router->group([
+//     'namespace' => 'App\Http\Controllers',
+// ], function ($router) {
+//     $router->get('/', function () {
+//         return abort(404);
+//     });
+//     require __DIR__ . '/../routes/web.php';
+// });
+
+// $app->router->group([
+//     'namespace' => 'App\Http\Controllers',
+// ], function ($router) {
+//     $router->get('/', function () {
+//         return abort(404);
+//     });
+//     $router->group([
+//         'prefix' => 'api',
+//     ], function () {
+//         require __DIR__ . '/../routes/api.php';
+//     });
+//     require __DIR__ . '/../routes/web.php';
+// });
+
+
 
 return $app;
