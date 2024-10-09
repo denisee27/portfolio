@@ -236,6 +236,7 @@ getData(): void {
     query.page = query?.page || 1;
     this.http.Get(this.apiPath, query).then((r: any) => {
         if (r.success) {
+            console.log(r)
             this.data = r?.response?.result || {};
             this.permission = r?.permission || {};
         }

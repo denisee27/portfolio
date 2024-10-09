@@ -45,6 +45,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \App\Http\Middleware\CorsMiddleware::class,
+            // \App\Http\Middleware\AuthenticateMiddleware::class,
             \App\Http\Middleware\ClearEmptyStringMiddleware::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -58,6 +59,7 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
+        'auth-token' => \App\Http\Middleware\AuthenticateMiddleware::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'api' => \App\Http\Middleware\PublicApiMiddleware::class,
         'clear' => \App\Http\Middleware\ClearEmptyStringMiddleware::class,

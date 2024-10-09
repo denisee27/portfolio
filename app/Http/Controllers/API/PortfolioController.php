@@ -31,7 +31,7 @@ class PortfolioController extends Controller
         $items = Portfolio::query();
         $items->orderBy('order', 'asc');
         $items->with(['images']);
-
+        // return response()->json(File::exists(public_path("uploads/9d344e35-230c-4cc8-bc5d-f34e3706aa11")));
         if (isset($request->filter) && $request->filter) {
             $filter = json_decode($request->filter, true);
             $items->where($filter);
@@ -88,7 +88,6 @@ class PortfolioController extends Controller
                 'wrong' => $validator->errors()
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-
         $data = (object) $validator->validated();
         DB::beginTransaction();
         try {
@@ -166,8 +165,8 @@ class PortfolioController extends Controller
             foreach($data->deleteImage ?? [] as $_delImg){
                 $delImg = (object) $_delImg;
                 $img = PortfolioImage::where('id',$delImg->id)->first();
-                if (File::exists(public_path("uploads/" . $delImg->id))) {
-                    File::delete(public_path("uploads/" . $delImg->id));
+                if (File::exists(public_path("uploads/" . $img->photo))) {
+                    File::delete(public_path("uploads/" . $img->photo));
                 }
                 $img->delete();
             }
@@ -224,7 +223,13 @@ class PortfolioController extends Controller
     public function delete(Request $request)
     {
         $ids = json_decode($request->getContent());
-        Portfolio::whereIn('id', $ids)->whereNot('id', auth()->user()->id)->delete();
+        $data  = Portfolio::whereIn('id', $ids)->first();
+        foreach($data->images as $img){
+            if (File::exists(public_path("uploads/" . $img->photo))) {
+                File::delete(public_path("uploads/" . $img->photo));
+            }
+        }
+        $data->delete();
         return $this->index($request);
     }
 }

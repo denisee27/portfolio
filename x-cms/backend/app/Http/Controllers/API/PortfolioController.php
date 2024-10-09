@@ -31,6 +31,7 @@ class PortfolioController extends Controller
         $items = Portfolio::query();
         $items->orderBy('order', 'asc');
         $items->with(['images']);
+        return response()->json(public_path('uploads/'));
 
         if (isset($request->filter) && $request->filter) {
             $filter = json_decode($request->filter, true);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', [DashboardController::class, 'index']);
-Route::get('/project-detail/{id}', [ProjectController::class, 'index']);
+    Route::get('/', [HomeController::class, 'index']);
+    Route::post('/email', [HomeController::class, 'email']);
+    Route::get('/project-detail/{id}', [ProjectController::class, 'index']);

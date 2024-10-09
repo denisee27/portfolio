@@ -9,12 +9,6 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index(){
-        $portfolio = Portfolio::with(['images'])->get();
-        $allPort = PortfolioImage::inRandomOrder()->get();
-        $data = [
-            'portfolios' => $portfolio,
-            'allports' => $allPort,
-        ];
-        return view('welcome',$data);
+        return response()->json(["status"=>true]);
     }
 }

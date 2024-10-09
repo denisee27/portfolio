@@ -5,6 +5,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\NavigationController;
 use App\Http\Controllers\API\PortfolioController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,9 @@ Route::get('/', function () {
     return response()->json(['success' => false, 'code' => '404']);
 });
 Route::post('auth/login', [AuthController::class, 'login']);
-Route::group(['middleware' => ['api', 'clear']], function () {
+Route::group(['middleware' => ['auth-token','api', 'clear']], function () {
+    Route::get('dashboard', [DashboardController::class, 'index']);
+
     Route::group(['prefix' => 'auth'], function () {
         Route::get('/logout', [AuthController::class, 'logout']);
         Route::get('/nav', [AuthController::class, 'navigation']);
