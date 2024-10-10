@@ -20,7 +20,7 @@ class HomeController extends Controller
     }
 
     public function email(){
-        return response('OK', 200); // 200 is the HTTP status code for OK
+        return response('OK', 200);
 
     }
 
